@@ -7,6 +7,6 @@ import testTask.entity.Phone;
 import java.util.Set;
 
 public interface EmailRepository extends JpaRepository<Email, Long> {
-//    Set<Email> findByContactId(Long id);
-//    void deleteEmailsByContactId(Long id);
+    Set<Email> findByContactId(Long id);
+    void deleteEmailsByContactId(Long id);
 }

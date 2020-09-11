@@ -62,8 +62,8 @@ public class ContractRestControllerV1 {
     @PatchMapping("update/{id}")
     public HttpStatus update(@PathVariable(name = "id") Long id, @RequestBody ContactDto contactDto) {
         try {
-//            contactService.clearContactEmails(id);
-//            contactService.clearContactPhones(id);
+            contactService.clearContactEmails(id);
+            contactService.clearContactPhones(id);
 
             Contact contact = contactService.findContactById(id);
 

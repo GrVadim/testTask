@@ -9,6 +9,7 @@ import testTask.repository.PhoneRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,19 @@ public class ContactService {
         return contactRepository.findAll();
     }
 
+    @Transactional
+    public boolean clearContactEmails(Long contactId) {
+        emailRepository.deleteEmailsByContactId(contactId);
+        return true;
+    }
+
+    @Transactional
+    public boolean clearContactPhones(Long contactId) {
+        phoneRepository.deletePhonesByContactId(contactId);
+        return true;
+    }
+
+    @Transactional
     public boolean saveContact(Contact contact) {
         contactRepository.save(contact);
         return true;
