@@ -1,6 +1,9 @@
 package testTask.entity;
 
 
+
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,7 +19,6 @@ public class Phone {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Contact__id")
     private Contact contact;
-
 
     public Phone() {
     }

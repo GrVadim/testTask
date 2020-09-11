@@ -1,6 +1,8 @@
 package testTask.entity;
 
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,7 +14,6 @@ public class Email {
 
     private Long contactId;
     private String email;
-
 
     public Email() {
     }

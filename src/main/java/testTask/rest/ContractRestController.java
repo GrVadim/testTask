@@ -69,9 +69,9 @@ public class ContractRestController {
         try {
             User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-            List<Contact> dublicates = contactService.findByNameAndUserId(ContactDto.getName(), currentUser.getId());
+            List<Contact> duplicates = contactService.findByNameAndUserId(ContactDto.getName(), currentUser.getId());
 
-            if (dublicates != null && !dublicates.isEmpty()) {
+            if (duplicates != null && !duplicates.isEmpty()) {
                 return new ResponseEntity<>("Contact with name: " + ContactDto.getName() + " already exists", HttpStatus.BAD_REQUEST);
             }
 
@@ -95,9 +95,6 @@ public class ContractRestController {
             if (contact == null) {
                 throw new BadCredentialsException("Contact with id: " + id + " not found");
             }
-            //TODO подумать как убрать этот костыль
-            contactService.clearContactEmails(id);
-            contactService.clearContactPhones(id);
 
             Set<String> phones = contactDto.getPhones();
             Set<String> emails = contactDto.getEmails();
@@ -136,7 +133,14 @@ public class ContractRestController {
     public HttpStatus deleteUserById(@PathVariable(name = "id") Long id) {
         try {
             User currentUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            contactService.deleteContact(id, currentUser.getId());
+
+            Contact contact = contactService.findContactById(id, currentUser.getId());
+
+            if (contact == null) {
+                throw new BadCredentialsException("Contact with id: " + id + " not found");
+            }
+
+            contactService.deleteContact(id);
             return HttpStatus.OK;
         } catch (Exception e) {
             throw new BadCredentialsException("Failed to delete user");

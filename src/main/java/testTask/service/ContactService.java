@@ -1,14 +1,22 @@
 package testTask.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import testTask.entity.Contact;
+import testTask.entity.Email;
+import testTask.entity.Phone;
 import testTask.repository.ContactRepository;
 import testTask.repository.EmailRepository;
 import testTask.repository.PhoneRepository;
+import testTask.validator.EmailValidator;
+import testTask.validator.PhoneValidator;
+
 
 import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ContactService {
@@ -21,44 +29,64 @@ public class ContactService {
     PhoneRepository phoneRepository;
 
 
-    @Transactional
     public Contact findContactById(Long contactId, Long userId) {
         return  contactRepository.findByIdAndUserId(contactId, userId);
     }
 
-    @Transactional
     public List<Contact> listAllContacts(Long userId) {
         return contactRepository.findAllByUserId(userId);
     }
 
-    @Transactional
-    public boolean clearContactEmails(Long contactId) {
+    public void deleteEmailsByContactId(Long contactId) {
         emailRepository.deleteEmailsByContactId(contactId);
-        return true;
     }
 
-    @Transactional
-    public boolean clearContactPhones(Long contactId) {
+    public void deletePhonesByContactId(Long contactId) {
         phoneRepository.deletePhonesByContactId(contactId);
-        return true;
     }
 
-    @Transactional
-    public boolean saveContact(Contact contact) {
+    public void saveContact(Contact contact)  {
+        validateContact(contact);
         contactRepository.save(contact);
-        return true;
     }
 
-    @Transactional
-    public boolean deleteContact(Long contactId, Long userId) {
-        if (contactRepository.findByIdAndUserId(contactId, userId) != null) {
-            contactRepository.deleteById(contactId);
-            return true;
-        }
-        return false;
+    public void deleteContact(Long contactId) {
+        contactRepository.deleteById(contactId);
     }
 
     public List<Contact> findByNameAndUserId(String name, Long userId) {
         return contactRepository.findByNameAndUserId(name, userId);
+    }
+
+    public boolean validateContact(Contact contact) {
+        Set<String> setEmails = new HashSet<>();
+        Set<String> setPhones = new HashSet<>();
+
+        EmailValidator emailValidator = new EmailValidator();
+        PhoneValidator phoneValidator = new PhoneValidator();
+
+        for (Email email: contact.getEmails()) {
+            if (!emailValidator.validateEmail(email.getEmail())) {
+                throw new RuntimeException ("Email "+email.getEmail()+" not valid");
+            }
+            setEmails.add(email.getEmail());
+        }
+
+        for (Phone phone: contact.getPhones()) {
+            if (!phoneValidator.validatePhone(phone.getPhone())) {
+                throw new RuntimeException ("Phone "+phone.getPhone()+" not valid");
+            }
+            setPhones.add(phone.getPhone());
+        }
+
+        if (setEmails.size() != contact.getEmails().size()) {
+            throw new RuntimeException ("Duplicate emails");
+        }
+
+        if (setPhones.size() != contact.getPhones().size()) {
+            throw new RuntimeException ("Duplicate phone");
+        }
+
+        return true;
     }
 }

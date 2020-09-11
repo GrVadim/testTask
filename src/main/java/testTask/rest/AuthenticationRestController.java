@@ -79,8 +79,8 @@ public class AuthenticationRestController {
             user.setPassword(requestDto.getPassword());
             userService.saveUser(user);
 
-            Map<Object, Object> response = new HashMap<>();
-            return ResponseEntity.ok(response);
+
+            return new ResponseEntity<>("User registered", HttpStatus.OK);
         } catch (Exception e) {
             throw new BadCredentialsException("Failed to register user");
         }

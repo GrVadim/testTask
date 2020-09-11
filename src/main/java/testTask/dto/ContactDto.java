@@ -51,7 +51,7 @@ public class ContactDto {
         }
         if (emails != null &&  !emails.isEmpty()) {
             for (Email email: emails) {
-                contactDto.getPhones().add(email.getEmail());
+                contactDto.getEmails().add(email.getEmail());
             }
         }
 

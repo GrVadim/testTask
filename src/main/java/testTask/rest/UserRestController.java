@@ -25,6 +25,7 @@ public class UserRestController {
 
     @GetMapping(value = "{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id){
+
         User user = userService.findUserById(id);
 
         if(user == null){
