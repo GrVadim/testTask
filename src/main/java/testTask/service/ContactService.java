@@ -13,7 +13,6 @@ import testTask.validator.EmailValidator;
 import testTask.validator.PhoneValidator;
 
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

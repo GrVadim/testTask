@@ -1,7 +1,6 @@
 package testTask.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.validator.constraints.UniqueElements;
 import testTask.entity.Contact;
 import testTask.entity.Email;
 import testTask.entity.Phone;
