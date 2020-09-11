@@ -1,14 +1,11 @@
 package testTask.entity;
 
 
-import org.springframework.data.annotation.Transient;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,6 +14,9 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    private Long userId;
 
     @Size(min=2)
     private String name;
@@ -62,5 +62,13 @@ public class Contact {
 
     public void setEmails(Set<Email> emails) {
         this.emails = emails;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

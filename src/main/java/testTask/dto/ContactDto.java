@@ -1,15 +1,13 @@
 package testTask.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.validator.constraints.UniqueElements;
 import testTask.entity.Contact;
 import testTask.entity.Email;
 import testTask.entity.Phone;
-import testTask.entity.User;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)

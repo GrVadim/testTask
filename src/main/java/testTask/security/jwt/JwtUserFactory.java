@@ -3,13 +3,6 @@ package testTask.security.jwt;
 
 import testTask.entity.User;
 
-/**
- * Implementation of Factory Method for class {@link JwtUser}.
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
-
 public final class JwtUserFactory {
 
     public JwtUserFactory() {

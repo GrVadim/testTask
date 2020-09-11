@@ -7,16 +7,12 @@ import testTask.repository.ContactRepository;
 import testTask.repository.EmailRepository;
 import testTask.repository.PhoneRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ContactService {
-    @PersistenceContext
-    private EntityManager em;
+
     @Autowired
     ContactRepository contactRepository;
     @Autowired
@@ -25,13 +21,14 @@ public class ContactService {
     PhoneRepository phoneRepository;
 
 
-    public Contact findContactById(Long contactId) {
-        Optional<Contact> contactFromDb = contactRepository.findById(contactId);
-        return contactFromDb.orElse(new Contact());
+    @Transactional
+    public Contact findContactById(Long contactId, Long userId) {
+        return  contactRepository.findByIdAndUserId(contactId, userId);
     }
 
-    public List<Contact> allContacts() {
-        return contactRepository.findAll();
+    @Transactional
+    public List<Contact> listAllContacts(Long userId) {
+        return contactRepository.findAllByUserId(userId);
     }
 
     @Transactional
@@ -52,16 +49,16 @@ public class ContactService {
         return true;
     }
 
-    public boolean deleteContact(Long contactId) {
-        if (contactRepository.findById(contactId).isPresent()) {
+    @Transactional
+    public boolean deleteContact(Long contactId, Long userId) {
+        if (contactRepository.findByIdAndUserId(contactId, userId) != null) {
             contactRepository.deleteById(contactId);
             return true;
         }
         return false;
     }
 
-    public List<Contact> ContactgtList(Long idMin) {
-        return em.createQuery("SELECT u FROM Contact u WHERE u.id > :paramId", Contact.class)
-                .setParameter("paramId", idMin).getResultList();
+    public List<Contact> findByNameAndUserId(String name, Long userId) {
+        return contactRepository.findByNameAndUserId(name, userId);
     }
 }

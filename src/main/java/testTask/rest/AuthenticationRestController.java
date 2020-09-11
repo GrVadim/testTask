@@ -1,6 +1,7 @@
 package testTask.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,16 +21,9 @@ import testTask.service.UserService;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * REST controller for authentication requests (login, logout, register, etc.)
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
-
 @RestController
 @RequestMapping(value = "/auth/")
-public class AuthenticationRestControllerV1 {
+public class AuthenticationRestController {
 
     private final AuthenticationManager authenticationManager;
 
@@ -40,8 +34,8 @@ public class AuthenticationRestControllerV1 {
     private final ContactService contactService;
 
     @Autowired
-    public AuthenticationRestControllerV1(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService,
-                                          ContactService contactService) {
+    public AuthenticationRestController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService,
+                                        ContactService contactService) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
@@ -68,6 +62,27 @@ public class AuthenticationRestControllerV1 {
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username or password");
+        }
+    }
+
+    @PostMapping("register")
+    public ResponseEntity register(@RequestBody AuthenticationRequestDto requestDto) {
+        try {
+            String username = requestDto.getUsername();
+
+            if (userService.findByUsername(username) != null) {
+                return new ResponseEntity<>("User with username: " + username + " already exists", HttpStatus.BAD_REQUEST);
+            }
+
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(requestDto.getPassword());
+            userService.saveUser(user);
+
+            Map<Object, Object> response = new HashMap<>();
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw new BadCredentialsException("Failed to register user");
         }
     }
 

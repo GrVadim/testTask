@@ -2,7 +2,6 @@ package testTask.entity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "contact_phones")

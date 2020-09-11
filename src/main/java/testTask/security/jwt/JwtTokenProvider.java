@@ -17,20 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 
-/**
- * Util class that provides methods for generation, validation, etc. of JWT token.
- *
- * @author Eugene Suleimanov
- * @version 1.0
- */
-
 @Component
 public class JwtTokenProvider {
 
     @Value("${jwt.token.secret}")
     private String secret;
 
-    @Value("${jwt.token.expired}")
+    @Value("${jwt.token.expired}00")
     private long validityInMilliseconds;
 
 
@@ -73,9 +66,9 @@ public class JwtTokenProvider {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        String bearerToken = req.getHeader("Authorization");
-        if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            return bearerToken.substring(7, bearerToken.length());
+        String token = req.getHeader("Authorization");
+        if (token != null) {
+            return token;
         }
         return null;
     }
