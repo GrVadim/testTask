@@ -79,14 +79,6 @@ public class ContactService {
             setPhones.add(phone.getPhone());
         }
 
-        if (setEmails.size() != contact.getEmails().size()) {
-            throw new RuntimeException ("Duplicate emails");
-        }
-
-        if (setPhones.size() != contact.getPhones().size()) {
-            throw new RuntimeException ("Duplicate phone");
-        }
-
         return true;
     }
 }
